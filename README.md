@@ -113,7 +113,7 @@ The Hotel Management System (HMS) project aims to create a comprehensive platfor
 
 ### Docker Image
 
-The Docker image for this application can be found on DockerHub: https://hub.docker.com/repository/docker/abua6937431/inv-app
+The Docker image for this application can be found on DockerHub: https://hub.docker.com/repository/docker/abua6937431/hotel-app
 
 ### Postman Collection
 
