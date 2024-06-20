@@ -7,7 +7,6 @@ import com.example.HotelManagmentSystem.User.User;
 import com.example.HotelManagmentSystem.Mapper.ReservationMapper;
 import com.example.HotelManagmentSystem.Repository.ReservationRepository;
 import com.example.HotelManagmentSystem.Repository.RoomRepository;
-import com.example.HotelManagmentSystem.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

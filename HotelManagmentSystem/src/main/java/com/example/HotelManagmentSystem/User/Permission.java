@@ -3,6 +3,7 @@ package com.example.HotelManagmentSystem.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor
 public enum Permission {
 
@@ -16,7 +17,6 @@ public enum Permission {
     CUSTOMER_CREATE("CUSTOMER:create")
     ;
 
-    @Getter
     private final String permission;
 }
 

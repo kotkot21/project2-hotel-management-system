@@ -2,7 +2,7 @@ package com.example.HotelManagmentSystem.config;
 
 
 import com.example.HotelManagmentSystem.Audit.ApplicationAuditAware;
-import com.example.HotelManagmentSystem.Repository.UserRepository;
+import com.example.HotelManagmentSystem.User.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @RequiredArgsConstructor
-public class Applicationconfig {
+public class ApplicationConfig {
 
     private final UserRepository repository;
 
@@ -50,4 +50,5 @@ public class Applicationconfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }

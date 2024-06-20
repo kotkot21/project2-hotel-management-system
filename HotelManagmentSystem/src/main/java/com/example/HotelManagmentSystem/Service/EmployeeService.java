@@ -7,7 +7,7 @@ import com.example.HotelManagmentSystem.User.User;
 import com.example.HotelManagmentSystem.Mapper.EmployeeMapper;
 import com.example.HotelManagmentSystem.Repository.EmployeeRepository;
 import com.example.HotelManagmentSystem.Repository.HotelRepository;
-import com.example.HotelManagmentSystem.Repository.UserRepository;
+import com.example.HotelManagmentSystem.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +57,7 @@ public class EmployeeService {
             existingEmployee.setEndDate(employeeDTO.getEndDate() != null ? LocalDate.parse(employeeDTO.getEndDate()) : null);
             existingEmployee.setStatus(Employee.Status.valueOf(employeeDTO.getStatus()));
             // Ensure admin is updated if it has changed
-            if (!existingEmployee.getAdmin().getUserId().equals(employeeDTO.getManagedByAdminId())) {
+            if (!existingEmployee.getAdmin().getId().equals(employeeDTO.getManagedByAdminId())) {
                 Optional<User> admin = userRepository.findById(employeeDTO.getManagedByAdminId());
                 if (admin.isPresent()) {
                     existingEmployee.setAdmin(admin.get());

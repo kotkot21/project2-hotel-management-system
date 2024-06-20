@@ -1,10 +1,10 @@
 package com.example.HotelManagmentSystem.auth;
 
-import com.example.HotelManagmentSystem.Repository.UserRepository;
 import com.example.HotelManagmentSystem.Token.Token;
 import com.example.HotelManagmentSystem.Token.TokenRepository;
 import com.example.HotelManagmentSystem.Token.TokenType;
 import com.example.HotelManagmentSystem.User.User;
+import com.example.HotelManagmentSystem.User.UserRepository;
 import com.example.HotelManagmentSystem.config.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;

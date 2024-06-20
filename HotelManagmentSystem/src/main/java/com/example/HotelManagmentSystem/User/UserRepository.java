@@ -1,11 +1,9 @@
-package com.example.HotelManagmentSystem.Repository;
+package com.example.HotelManagmentSystem.User;
 
-import com.example.HotelManagmentSystem.User.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-
 
 
 @Repository
