@@ -32,4 +32,37 @@ public class UserService {
         // save the new password
         repository.save(user);
     }
+
+
+    private final UserRepository userRepository;
+
+    public UserProfileResponse getProfile(Principal principal) {
+        var user = getUserFromPrincipal(principal);
+        return UserProfileResponse.builder()
+                .id(user.getId())
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .email(user.getEmail())
+                .build();
+    }
+
+    public UserProfileResponse updateProfile(UpdateUserProfileRequest request, Principal principal) {
+        var user = getUserFromPrincipal(principal);
+        user.setFirstname(request.getFirstname());
+        user.setLastname(request.getLastname());
+        user.setEmail(request.getEmail());
+        // Update other fields as necessary
+
+        var updatedUser = userRepository.save(user);
+        return UserProfileResponse.builder()
+                .id(updatedUser.getId())
+                .firstname(updatedUser.getFirstname())
+                .lastname(updatedUser.getLastname())
+                .email(updatedUser.getEmail())
+                .build();
+    }
+
+    private User getUserFromPrincipal(Principal principal) {
+        return (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+    }
 }

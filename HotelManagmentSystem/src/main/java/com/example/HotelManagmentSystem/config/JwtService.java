@@ -2,12 +2,15 @@ package com.example.HotelManagmentSystem.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.security.Key;
 import java.util.Date;
@@ -18,7 +21,8 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    //  a secret cryptographic key used to sign and verify JWTs
+    private static final Logger log = LoggerFactory.getLogger(JwtService.class);
+
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
     @Value("${application.security.jwt.expiration}")
@@ -81,6 +85,7 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
+        validateJwtFormat(token);
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignInKey())
@@ -92,5 +97,12 @@ public class JwtService {
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private void validateJwtFormat(String token) {
+        if (token == null || token.split("\\.").length != 3) {
+            log.error("Invalid JWT format: {}", token);
+            throw new MalformedJwtException("JWT strings must contain exactly 2 period characters. Found: " + (token == null ? 0 : token.split("\\.").length - 1));
+        }
     }
 }
