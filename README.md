@@ -121,7 +121,7 @@ The Postman collection for testing the APIs can be found in the repository under
 
 ## API Documentation
 
-The API documentation is generated using OpenAPI 3.1.0 standards and can be accessed at `[/example/swagger](http://localhost:8080/swagger-ui/index.html)` once the application is running.
+The API documentation is generated using OpenAPI 3.1.0 standards and can be accessed at `http://localhost:8080/swagger-ui/index.html` once the application is running.
 
 ## Lessons Learned
 
