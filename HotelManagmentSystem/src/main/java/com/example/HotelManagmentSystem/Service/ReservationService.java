@@ -7,6 +7,7 @@ import com.example.HotelManagmentSystem.User.User;
 import com.example.HotelManagmentSystem.Mapper.ReservationMapper;
 import com.example.HotelManagmentSystem.Repository.ReservationRepository;
 import com.example.HotelManagmentSystem.Repository.RoomRepository;
+import com.example.HotelManagmentSystem.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,7 +77,7 @@ public class ReservationService {
     }
 
     public List<ReservationDTO> getReservationsByUserId(Long userId) {
-        List<Reservation> reservations = reservationRepository.findByUser_UserId(userId);
+        List<Reservation> reservations = reservationRepository.findByUser_Id(userId);
         return reservationMapper.toDTOList(reservations);
     }
 

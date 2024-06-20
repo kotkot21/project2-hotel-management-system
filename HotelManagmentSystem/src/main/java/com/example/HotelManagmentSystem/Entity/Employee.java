@@ -26,7 +26,6 @@ public class Employee {
     @JoinColumn(name = "managed_by_admin_id", nullable = false)
     private User admin;
 
-
     @Enumerated(EnumType.STRING)
     private Role role;
 

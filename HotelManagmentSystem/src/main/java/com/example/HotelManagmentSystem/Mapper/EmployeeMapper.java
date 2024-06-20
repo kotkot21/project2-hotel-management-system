@@ -28,7 +28,7 @@ public class EmployeeMapper {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setEmployeeId(employee.getEmployeeId());
         employeeDTO.setHotelId(employee.getHotel().getHotelId());
-        employeeDTO.setManagedByAdminId(employee.getAdmin().getUserId());
+        employeeDTO.setManagedByAdminId(employee.getAdmin().getId());
         employeeDTO.setRole(employee.getRole().name());
         employeeDTO.setSalary(employee.getSalary());
         employeeDTO.setStartDate(employee.getStartDate().toString());

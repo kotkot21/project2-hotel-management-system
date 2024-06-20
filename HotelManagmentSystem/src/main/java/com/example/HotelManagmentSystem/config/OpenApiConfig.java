@@ -18,8 +18,8 @@ import io.swagger.v3.oas.annotations.servers.Server;
                         email = "1201496@Students.Birzeit.edu",
                         url = "https://ahmadnaserportfolio.netlify.app/"
                 ),
-                description = "OpenApi documentation for Hotel Managment system",
-                title = "Hotel Managment system",
+                description = "OpenApi documentation for Hotel Management system",
+                title = "Hotel Management system",
                 version = "1.0",
                 license = @License(
                         name = "No License",

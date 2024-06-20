@@ -19,12 +19,14 @@ public class InvoiceController {
     private InvoiceService invoiceService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('admin:create')")
     public ResponseEntity<InvoiceDTO> createInvoice(@RequestBody InvoiceDTO invoiceDTO) {
         InvoiceDTO createdInvoice = invoiceService.createInvoice(invoiceDTO);
         return ResponseEntity.ok(createdInvoice);
     }
 
     @PutMapping("/{invoiceId}")
+    @PreAuthorize("hasAuthority('admin:update')")
     public ResponseEntity<InvoiceDTO> updateInvoice(@PathVariable Long invoiceId, @RequestBody InvoiceDTO invoiceDTO) {
         InvoiceDTO updatedInvoice = invoiceService.updateInvoice(invoiceId, invoiceDTO);
         if (updatedInvoice != null) {
@@ -34,6 +36,7 @@ public class InvoiceController {
     }
 
     @DeleteMapping("/{invoiceId}")
+    @PreAuthorize("hasAuthority('admin:delete')")
     public ResponseEntity<Void> deleteInvoice(@PathVariable Long invoiceId) {
         if (invoiceService.deleteInvoice(invoiceId)) {
             return ResponseEntity.noContent().build();
@@ -42,6 +45,7 @@ public class InvoiceController {
     }
 
     @GetMapping("/{invoiceId}")
+    @PreAuthorize("hasAnyAuthority('admin:read')")
     public ResponseEntity<InvoiceDTO> getInvoiceById(@PathVariable Long invoiceId) {
         InvoiceDTO invoice = invoiceService.getInvoiceById(invoiceId);
         if (invoice != null) {
@@ -51,18 +55,21 @@ public class InvoiceController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('admin:read')")
     public ResponseEntity<List<InvoiceDTO>> getAllInvoices() {
         List<InvoiceDTO> invoices = invoiceService.getAllInvoices();
         return ResponseEntity.ok(invoices);
     }
 
     @GetMapping("/reservation/{reservationId}")
+    @PreAuthorize("hasAnyAuthority('admin:read', 'CUSTOMER:read')")
     public ResponseEntity<List<InvoiceDTO>> getInvoicesByReservationId(@PathVariable Long reservationId) {
         List<InvoiceDTO> invoices = invoiceService.getInvoicesByReservationId(reservationId);
         return ResponseEntity.ok(invoices);
     }
 
     @GetMapping("/status/{status}")
+    @PreAuthorize("hasAnyAuthority('admin:read')")
     public ResponseEntity<List<InvoiceDTO>> getInvoicesByStatus(@PathVariable Invoice.Status status) {
         List<InvoiceDTO> invoices = invoiceService.getInvoicesByStatus(status);
         return ResponseEntity.ok(invoices);

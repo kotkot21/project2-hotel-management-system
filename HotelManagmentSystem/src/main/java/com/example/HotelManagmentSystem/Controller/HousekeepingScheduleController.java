@@ -19,12 +19,14 @@ public class HousekeepingScheduleController {
     private HousekeepingScheduleService housekeepingScheduleService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('admin:create')")
     public ResponseEntity<HousekeepingScheduleDTO> createSchedule(@RequestBody HousekeepingScheduleDTO housekeepingScheduleDTO) {
         HousekeepingScheduleDTO createdSchedule = housekeepingScheduleService.createSchedule(housekeepingScheduleDTO);
         return ResponseEntity.ok(createdSchedule);
     }
 
     @PutMapping("/{scheduleId}")
+    @PreAuthorize("hasAuthority('admin:update')")
     public ResponseEntity<HousekeepingScheduleDTO> updateSchedule(@PathVariable Long scheduleId, @RequestBody HousekeepingScheduleDTO housekeepingScheduleDTO) {
         HousekeepingScheduleDTO updatedSchedule = housekeepingScheduleService.updateSchedule(scheduleId, housekeepingScheduleDTO);
         if (updatedSchedule != null) {
@@ -34,6 +36,7 @@ public class HousekeepingScheduleController {
     }
 
     @DeleteMapping("/{scheduleId}")
+    @PreAuthorize("hasAuthority('admin:delete')")
     public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId) {
         if (housekeepingScheduleService.deleteSchedule(scheduleId)) {
             return ResponseEntity.noContent().build();
@@ -42,6 +45,7 @@ public class HousekeepingScheduleController {
     }
 
     @GetMapping("/{scheduleId}")
+    @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity<HousekeepingScheduleDTO> getScheduleById(@PathVariable Long scheduleId) {
         HousekeepingScheduleDTO schedule = housekeepingScheduleService.getScheduleById(scheduleId);
         if (schedule != null) {
@@ -51,24 +55,28 @@ public class HousekeepingScheduleController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity<List<HousekeepingScheduleDTO>> getAllSchedules() {
         List<HousekeepingScheduleDTO> schedules = housekeepingScheduleService.getAllSchedules();
         return ResponseEntity.ok(schedules);
     }
 
     @GetMapping("/room/{roomId}")
+    @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity<List<HousekeepingScheduleDTO>> getSchedulesByRoomId(@PathVariable Long roomId) {
         List<HousekeepingScheduleDTO> schedules = housekeepingScheduleService.getSchedulesByRoomId(roomId);
         return ResponseEntity.ok(schedules);
     }
 
     @GetMapping("/employee/{employeeId}")
+    @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity<List<HousekeepingScheduleDTO>> getSchedulesByEmployeeId(@PathVariable Long employeeId) {
         List<HousekeepingScheduleDTO> schedules = housekeepingScheduleService.getSchedulesByEmployeeId(employeeId);
         return ResponseEntity.ok(schedules);
     }
 
     @GetMapping("/status/{status}")
+    @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity<List<HousekeepingScheduleDTO>> getSchedulesByStatus(@PathVariable HousekeepingSchedule.Status status) {
         List<HousekeepingScheduleDTO> schedules = housekeepingScheduleService.getSchedulesByStatus(status);
         return ResponseEntity.ok(schedules);

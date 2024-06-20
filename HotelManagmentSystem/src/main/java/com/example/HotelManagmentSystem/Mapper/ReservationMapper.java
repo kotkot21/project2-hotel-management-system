@@ -28,7 +28,7 @@ public class ReservationMapper {
     public ReservationDTO toDTO(Reservation reservation) {
         ReservationDTO reservationDTO = new ReservationDTO();
         reservationDTO.setReservationId(reservation.getReservationId());
-        reservationDTO.setUserId(reservation.getUser().getUserId());
+        reservationDTO.setUserId(reservation.getUser().getId());
         reservationDTO.setRoomId(reservation.getRoom().getRoomId());
         reservationDTO.setCheckInDate(reservation.getCheckInDate());
         reservationDTO.setCheckOutDate(reservation.getCheckOutDate());

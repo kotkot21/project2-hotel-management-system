@@ -18,12 +18,14 @@ public class RoomController {
     private RoomService roomService;
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('admin:create')")
     public ResponseEntity<RoomDTO> createRoom(@RequestBody RoomDTO roomDTO) {
         RoomDTO createdRoom = roomService.createRoom(roomDTO);
         return ResponseEntity.ok(createdRoom);
     }
 
     @PutMapping("/{roomId}")
+    @PreAuthorize("hasAnyAuthority('admin:update')")
     public ResponseEntity<RoomDTO> updateRoom(@PathVariable Long roomId, @RequestBody RoomDTO roomDTO) {
         RoomDTO updatedRoom = roomService.updateRoom(roomId, roomDTO);
         if (updatedRoom != null) {
@@ -33,12 +35,14 @@ public class RoomController {
     }
 
     @DeleteMapping("/{roomId}")
+    @PreAuthorize("hasAnyAuthority('admin:delete')")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long roomId) {
         roomService.deleteRoom(roomId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{roomId}")
+    @PreAuthorize("hasAnyAuthority('admin:read', 'CUSTOMER:read')")
     public ResponseEntity<RoomDTO> getRoomById(@PathVariable Long roomId) {
         RoomDTO room = roomService.getRoomById(roomId);
         if (room != null) {
@@ -48,12 +52,14 @@ public class RoomController {
     }
 
     @GetMapping("/hotel/{hotelId}")
+    @PreAuthorize("hasAnyAuthority('admin:read', 'CUSTOMER:read')")
     public ResponseEntity<List<RoomDTO>> getRoomsByHotelId(@PathVariable Long hotelId) {
         List<RoomDTO> rooms = roomService.getRoomsByHotelId(hotelId);
         return ResponseEntity.ok(rooms);
     }
 
     @GetMapping("/status/{status}")
+    @PreAuthorize("hasAnyAuthority('admin:read', 'CUSTOMER:read')")
     public ResponseEntity<List<RoomDTO>> getRoomsByStatus(@PathVariable String status) {
         List<RoomDTO> rooms = roomService.getRoomsByStatus(status);
         return ResponseEntity.ok(rooms);
