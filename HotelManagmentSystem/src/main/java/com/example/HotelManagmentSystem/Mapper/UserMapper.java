@@ -1,9 +1,8 @@
 package com.example.HotelManagmentSystem.Mapper;
 
-import com.example.HotelManagmentSystem.DTO.HotelDTO;
 import com.example.HotelManagmentSystem.DTO.UserDTO;
-import com.example.HotelManagmentSystem.Entity.Hotel;
-import com.example.HotelManagmentSystem.Entity.User;
+import com.example.HotelManagmentSystem.User.Role;
+import com.example.HotelManagmentSystem.User.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,27 +13,22 @@ public class UserMapper {
 
     public User toEntity(UserDTO userDTO) {
         User user = new User();
-        user.setUserId(userDTO.getUserId());
-        user.setUsername(userDTO.getUsername());
+        user.setId(userDTO.getId());
+        user.setFirstname(userDTO.getFirstname());
+        user.setLastname(userDTO.getLastname());
         user.setPassword(userDTO.getPassword());
         user.setEmail(userDTO.getEmail());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setPhoneNumber(userDTO.getPhoneNumber());
-        user.setRoleName(User.Role.valueOf(userDTO.getRoleName()));
+        user.setRole(Role.valueOf(userDTO.getRole()));
         return user;
     }
 
     public UserDTO toDTO(User user) {
         UserDTO userDTO = new UserDTO();
-        userDTO.setUserId(user.getUserId());
-        userDTO.setUsername(user.getUsername());
-        userDTO.setPassword(user.getPassword()); // Ensure password is included in the DTO
+        userDTO.setFirstname(user.getFirstname());
+        userDTO.setLastname(user.getLastname());
+        userDTO.setPassword(user.getPassword());
         userDTO.setEmail(user.getEmail());
-        userDTO.setFirstName(user.getFirstName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setPhoneNumber(user.getPhoneNumber());
-        userDTO.setRoleName(user.getRoleName().name());
+        userDTO.setRole(user.getRole().name());
         return userDTO;
     }
 

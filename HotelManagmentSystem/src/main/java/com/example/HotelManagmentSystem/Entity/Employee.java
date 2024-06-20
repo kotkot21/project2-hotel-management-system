@@ -1,5 +1,6 @@
 package com.example.HotelManagmentSystem.Entity;
 
+import com.example.HotelManagmentSystem.User.User;
 import jakarta.persistence.*;
 import lombok.*;
 

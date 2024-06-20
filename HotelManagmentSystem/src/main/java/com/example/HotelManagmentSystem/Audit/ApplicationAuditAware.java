@@ -1,5 +1,6 @@
 package com.example.HotelManagmentSystem.Audit;
 
+import com.example.HotelManagmentSystem.User.User;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

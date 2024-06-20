@@ -10,14 +10,10 @@ public enum Permission {
     ADMIN_UPDATE("admin:update"),
     ADMIN_CREATE("admin:create"),
     ADMIN_DELETE("admin:delete"),
-    Employee_READ("Employee:read"),
-    Employee_UPDATE("Employee:update"),
-    Employee_CREATE("Employee:create"),
-    Employee_DELETE("Employee:delete"),
-    USER_READ("User:read"),
-    USER_UPDATE("User:update"),
-    USER_DELETE("User:delete"),
-    USER_CREATE("User:create")
+    CUSTOMER_READ("CUSTOMER:read"),
+    CUSTOMER_UPDATE("CUSTOMER:update"),
+    CUSTOMER_DELETE("CUSTOMER:delete"),
+    CUSTOMER_CREATE("CUSTOMER:create")
     ;
 
     @Getter

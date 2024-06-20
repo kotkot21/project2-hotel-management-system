@@ -3,7 +3,7 @@ package com.example.HotelManagmentSystem.Mapper;
 import com.example.HotelManagmentSystem.DTO.EmployeeDTO;
 import com.example.HotelManagmentSystem.Entity.Employee;
 import com.example.HotelManagmentSystem.Entity.Hotel;
-import com.example.HotelManagmentSystem.Entity.User;
+import com.example.HotelManagmentSystem.User.User;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;

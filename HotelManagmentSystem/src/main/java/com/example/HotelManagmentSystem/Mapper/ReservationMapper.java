@@ -3,7 +3,7 @@ package com.example.HotelManagmentSystem.Mapper;
 import com.example.HotelManagmentSystem.DTO.ReservationDTO;
 import com.example.HotelManagmentSystem.Entity.Reservation;
 import com.example.HotelManagmentSystem.Entity.Room;
-import com.example.HotelManagmentSystem.Entity.User;
+import com.example.HotelManagmentSystem.User.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

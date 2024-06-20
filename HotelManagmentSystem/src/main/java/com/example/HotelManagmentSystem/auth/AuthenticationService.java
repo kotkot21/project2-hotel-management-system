@@ -2,22 +2,25 @@ package com.example.HotelManagmentSystem.auth;
 
 import com.example.HotelManagmentSystem.Repository.UserRepository;
 import com.example.HotelManagmentSystem.Token.Token;
+import com.example.HotelManagmentSystem.Token.TokenRepository;
 import com.example.HotelManagmentSystem.Token.TokenType;
+import com.example.HotelManagmentSystem.User.User;
+import com.example.HotelManagmentSystem.config.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
-
-
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-
     private final UserRepository repository;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
@@ -32,6 +35,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
                 .build();
+
         var savedUser = repository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);

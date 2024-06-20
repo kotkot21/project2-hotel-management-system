@@ -3,7 +3,7 @@ package com.example.HotelManagmentSystem.Service;
 import com.example.HotelManagmentSystem.DTO.ReservationDTO;
 import com.example.HotelManagmentSystem.Entity.Reservation;
 import com.example.HotelManagmentSystem.Entity.Room;
-import com.example.HotelManagmentSystem.Entity.User;
+import com.example.HotelManagmentSystem.User.User;
 import com.example.HotelManagmentSystem.Mapper.ReservationMapper;
 import com.example.HotelManagmentSystem.Repository.ReservationRepository;
 import com.example.HotelManagmentSystem.Repository.RoomRepository;
