@@ -1,6 +1,6 @@
 package com.example.HotelManagmentSystem.Controller;
 
-import com.example.HotelManagmentSystem.ChangeRole.ChangeRoleRequestForEmployee;
+import com.example.HotelManagmentSystem.ChangeRole.ChangeRoleRequest;
 import com.example.HotelManagmentSystem.DTO.EmployeeDTO;
 import com.example.HotelManagmentSystem.Service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,7 +96,7 @@ public class EmployeeController {
 
     @PutMapping("/change-role/{employeeId}")
     @PreAuthorize("hasAuthority('admin:update')")
-    public ResponseEntity<EmployeeDTO> changeEmployeeRole(@PathVariable Long employeeId, @RequestBody ChangeRoleRequestForEmployee changeRoleRequest) {
+    public ResponseEntity<EmployeeDTO> changeEmployeeRole(@PathVariable Long employeeId, @RequestBody ChangeRoleRequest changeRoleRequest) {
         EmployeeDTO updatedEmployee = employeeService.changeEmployeeRole(employeeId, changeRoleRequest.getNewRole());
         if (updatedEmployee != null) {
             return ResponseEntity.ok(updatedEmployee);
