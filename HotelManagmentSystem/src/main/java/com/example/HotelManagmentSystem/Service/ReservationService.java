@@ -11,6 +11,7 @@ import com.example.HotelManagmentSystem.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,15 +29,28 @@ public class ReservationService {
 
     @Autowired
     private ReservationMapper reservationMapper;
+
     public ReservationDTO createReservation(ReservationDTO reservationDTO) {
         Optional<User> userOptional = userRepository.findById(reservationDTO.getUserId());
         Optional<Room> roomOptional = roomRepository.findById(reservationDTO.getRoomId());
 
         if (userOptional.isPresent() && roomOptional.isPresent()) {
-            User user = userOptional.get();
             Room room = roomOptional.get();
+            if (!room.getStatus().equals(Room.Status.AVAILABLE)) {
+                throw new IllegalArgumentException("Room is not available for reservation");
+            }
+
+            User user = userOptional.get();
             Reservation reservation = reservationMapper.toEntity(reservationDTO, user, room);
+            reservation.setBookingDate(new Date());  // Set bookingDate to current date
+            reservation.setCheckInDate(null);  // Set checkInDate to null
+            reservation.setCheckOutDate(null);  // Set checkOutDate to null
+            reservation.setStatus(Reservation.Status.CONFIRMED);  // Set status to CONFIRMED
+            room.setStatus(Room.Status.BOOKED);  // Set room status to BOOKED
+
             Reservation savedReservation = reservationRepository.save(reservation);
+            roomRepository.save(room);
+
             return reservationMapper.toDTO(savedReservation);
         } else {
             throw new IllegalArgumentException("User or Room not found");
@@ -91,3 +105,4 @@ public class ReservationService {
         return reservationMapper.toDTOList(reservations);
     }
 }
+

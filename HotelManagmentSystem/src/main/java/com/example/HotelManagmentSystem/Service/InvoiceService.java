@@ -6,9 +6,11 @@ import com.example.HotelManagmentSystem.Entity.Reservation;
 import com.example.HotelManagmentSystem.Mapper.InvoiceMapper;
 import com.example.HotelManagmentSystem.Repository.InvoiceRepository;
 import com.example.HotelManagmentSystem.Repository.ReservationRepository;
+import com.example.HotelManagmentSystem.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +32,9 @@ public class InvoiceService {
         if (reservationOptional.isPresent()) {
             Reservation reservation = reservationOptional.get();
             Invoice invoice = invoiceMapper.toEntity(invoiceDTO, reservation);
+            invoice.setStatus(Invoice.Status.UNPAID); // Set status to UNPAID
+            invoice.setInvoiceDate(new Date()); // Set invoice date to current date
+            invoice.setDueDate(null); // Set due date to null
             Invoice savedInvoice = invoiceRepository.save(invoice);
             return invoiceMapper.toDTO(savedInvoice);
         } else {
@@ -47,6 +52,31 @@ public class InvoiceService {
             existingInvoice.setStatus(Invoice.Status.valueOf(invoiceDTO.getStatus()));
             Invoice updatedInvoice = invoiceRepository.save(existingInvoice);
             return invoiceMapper.toDTO(updatedInvoice);
+        } else {
+            throw new IllegalArgumentException("Invoice not found");
+        }
+    }
+
+    public InvoiceDTO updateInvoiceStatus(Long invoiceId, Invoice.Status newStatus) {
+        Optional<Invoice> existingInvoiceOptional = invoiceRepository.findById(invoiceId);
+        if (existingInvoiceOptional.isPresent()) {
+            Invoice existingInvoice = existingInvoiceOptional.get();
+            existingInvoice.setStatus(newStatus);
+            if (newStatus == Invoice.Status.PAID) {
+                existingInvoice.setDueDate(new Date()); // Set due date to current date
+            }
+            Invoice updatedInvoice = invoiceRepository.save(existingInvoice);
+            return invoiceMapper.toDTO(updatedInvoice);
+        } else {
+            throw new IllegalArgumentException("Invoice not found");
+        }
+    }
+
+    public User getUserByInvoiceId(Long invoiceId) {
+        Optional<Invoice> invoiceOptional = invoiceRepository.findById(invoiceId);
+        if (invoiceOptional.isPresent()) {
+            Invoice invoice = invoiceOptional.get();
+            return invoice.getReservation().getUser();
         } else {
             throw new IllegalArgumentException("Invoice not found");
         }
@@ -80,3 +110,4 @@ public class InvoiceService {
         return invoiceMapper.toDTOList(invoices);
     }
 }
+

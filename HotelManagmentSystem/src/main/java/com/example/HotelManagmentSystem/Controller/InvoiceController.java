@@ -3,6 +3,7 @@ package com.example.HotelManagmentSystem.Controller;
 import com.example.HotelManagmentSystem.DTO.InvoiceDTO;
 import com.example.HotelManagmentSystem.Entity.Invoice;
 import com.example.HotelManagmentSystem.Service.InvoiceService;
+import com.example.HotelManagmentSystem.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,6 +34,13 @@ public class InvoiceController {
             return ResponseEntity.ok(updatedInvoice);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/status/{invoiceId}")
+    @PreAuthorize("hasAuthority('admin:update')")
+    public ResponseEntity<InvoiceDTO> updateInvoiceStatus(@PathVariable Long invoiceId, @RequestParam Invoice.Status newStatus) {
+        InvoiceDTO updatedInvoice = invoiceService.updateInvoiceStatus(invoiceId, newStatus);
+        return ResponseEntity.ok(updatedInvoice);
     }
 
     @DeleteMapping("/{invoiceId}")
@@ -74,4 +82,12 @@ public class InvoiceController {
         List<InvoiceDTO> invoices = invoiceService.getInvoicesByStatus(status);
         return ResponseEntity.ok(invoices);
     }
+
+    @GetMapping("/user/{invoiceId}")
+    @PreAuthorize("hasAnyAuthority('admin:read')")
+    public ResponseEntity<User> getUserByInvoiceId(@PathVariable Long invoiceId) {
+        User user = invoiceService.getUserByInvoiceId(invoiceId);
+        return ResponseEntity.ok(user);
+    }
 }
+

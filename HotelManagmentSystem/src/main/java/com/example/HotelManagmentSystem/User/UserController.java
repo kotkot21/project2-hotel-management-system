@@ -1,9 +1,9 @@
 package com.example.HotelManagmentSystem.User;
 
-import com.example.HotelManagmentSystem.User.ChangePasswordRequest;
-import com.example.HotelManagmentSystem.User.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -13,26 +13,32 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService service;
+    private final UserService userService;
 
-    @PatchMapping("/me")
-    public ResponseEntity<?> changePassword(
-            @RequestBody ChangePasswordRequest request,
+    @GetMapping("/me")
+    public ResponseEntity<User> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+        User user = userService.findByEmail(userDetails.getUsername());
+        return ResponseEntity.ok(user);
+    }
+
+    //    @PutMapping("/me")
+//    public ResponseEntity<User> updateCurrentUser(@RequestBody User userUpdate, @AuthenticationPrincipal UserDetails userDetails) {
+//        User user = userService.updateUser(userDetails.getUsername(), userUpdate);
+//        return ResponseEntity.ok(user);
+//    }
+    @PatchMapping("/profile")
+    public ResponseEntity<?> updateProfile(
+            @RequestBody UpdateProfileRequest request,
             Principal connectedUser
     ) {
-        service.changePassword(request, connectedUser);
+        userService.updateProfile(request, connectedUser);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<UserProfileResponse> getProfile(Principal principal) {
-        UserProfileResponse profile = service.getProfile(principal);
-        return ResponseEntity.ok(profile);
-    }
-
-    @PutMapping("/me")
-    public ResponseEntity<UserProfileResponse> updateProfile(@RequestBody UpdateUserProfileRequest request, Principal principal) {
-        UserProfileResponse updatedProfile = service.updateProfile(request, principal);
-        return ResponseEntity.ok(updatedProfile);
+    @PatchMapping("/me/password")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest,
+                                            @AuthenticationPrincipal UserDetails userDetails) {
+        userService.changePassword(changePasswordRequest, userDetails.getUsername());
+        return ResponseEntity.ok().build();
     }
 }

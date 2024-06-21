@@ -1,5 +1,6 @@
 package com.example.HotelManagmentSystem.Controller;
 
+import com.example.HotelManagmentSystem.ChangeRole.ChangeRoleRequestForEmployee;
 import com.example.HotelManagmentSystem.DTO.EmployeeDTO;
 import com.example.HotelManagmentSystem.Service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,5 +65,42 @@ public class EmployeeController {
     public ResponseEntity<List<EmployeeDTO>> getEmployeesByStatus(@PathVariable String status) {
         List<EmployeeDTO> employees = employeeService.getEmployeesByStatus(status);
         return ResponseEntity.ok(employees);
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAuthority('admin:read')")
+    public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
+        List<EmployeeDTO> employees = employeeService.getAllEmployees();
+        return ResponseEntity.ok(employees);
+    }
+
+    @PutMapping("/terminate/{employeeId}")
+    @PreAuthorize("hasAuthority('admin:update')")
+    public ResponseEntity<EmployeeDTO> terminateEmployee(@PathVariable Long employeeId) {
+        EmployeeDTO terminatedEmployee = employeeService.terminateEmployee(employeeId);
+        if (terminatedEmployee != null) {
+            return ResponseEntity.ok(terminatedEmployee);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/activate/{employeeId}")
+    @PreAuthorize("hasAuthority('admin:update')")
+    public ResponseEntity<EmployeeDTO> activateEmployee(@PathVariable Long employeeId) {
+        EmployeeDTO updatedEmployee = employeeService.activateEmployee(employeeId);
+        if (updatedEmployee != null) {
+            return ResponseEntity.ok(updatedEmployee);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/change-role/{employeeId}")
+    @PreAuthorize("hasAuthority('admin:update')")
+    public ResponseEntity<EmployeeDTO> changeEmployeeRole(@PathVariable Long employeeId, @RequestBody ChangeRoleRequestForEmployee changeRoleRequest) {
+        EmployeeDTO updatedEmployee = employeeService.changeEmployeeRole(employeeId, changeRoleRequest.getNewRole());
+        if (updatedEmployee != null) {
+            return ResponseEntity.ok(updatedEmployee);
+        }
+        return ResponseEntity.notFound().build();
     }
 }

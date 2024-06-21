@@ -2,8 +2,10 @@ package com.example.HotelManagmentSystem.User;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 
@@ -13,53 +15,60 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository repository;
-    public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
-
-        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-
-        // check if the current password is correct
-        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
-            throw new IllegalStateException("Wrong password");
-        }
-        // check if the two new passwords are the same
-        if (!request.getNewPassword().equals(request.getConfirmationPassword())) {
-            throw new IllegalStateException("Password are not the same");
-        }
-
-        // update the password
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-
-        // save the new password
-        repository.save(user);
-    }
 
 
     private final UserRepository userRepository;
 
-    public UserProfileResponse getProfile(Principal principal) {
-        var user = getUserFromPrincipal(principal);
-        return UserProfileResponse.builder()
-                .id(user.getId())
-                .firstname(user.getFirstname())
-                .lastname(user.getLastname())
-                .email(user.getEmail())
-                .build();
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("User not found"));
     }
 
-    public UserProfileResponse updateProfile(UpdateUserProfileRequest request, Principal principal) {
-        var user = getUserFromPrincipal(principal);
-        user.setFirstname(request.getFirstname());
-        user.setLastname(request.getLastname());
-        user.setEmail(request.getEmail());
-        // Update other fields as necessary
 
-        var updatedUser = userRepository.save(user);
-        return UserProfileResponse.builder()
-                .id(updatedUser.getId())
-                .firstname(updatedUser.getFirstname())
-                .lastname(updatedUser.getLastname())
-                .email(updatedUser.getEmail())
-                .build();
+    @Transactional
+    public void changePassword(ChangePasswordRequest changePasswordRequest, String email) {
+        User user = findByEmail(email);
+
+        if (!passwordEncoder.matches(changePasswordRequest.getCurrentPassword(), user.getPassword())) {
+            throw new IllegalStateException("Current password is incorrect");
+        }
+
+        if (!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmationPassword())) {
+            throw new IllegalStateException("New passwords do not match");
+        }
+
+        user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+        userRepository.save(user);
+    }
+
+
+
+    public void updateProfile(UpdateProfileRequest request, Principal connectedUser) {
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+
+        // Update fields if they are provided
+        if (request.getFirstname() != null) {
+            user.setFirstname(request.getFirstname());
+        }
+        if (request.getLastname() != null) {
+            user.setLastname(request.getLastname());
+        }
+        if (request.getEmail() != null) {
+            user.setEmail(request.getEmail());
+        }
+
+        // Save the updated user
+        repository.save(user);
+    }
+
+    @Transactional
+    public User updateUser(String email, User userUpdate) {
+        User user = findByEmail(email);
+        user.setFirstname(userUpdate.getFirstname());
+        user.setLastname(userUpdate.getLastname());
+        user.setEmail(userUpdate.getEmail());
+        // Additional fields can be updated here as needed
+        return userRepository.save(user);
     }
 
     private User getUserFromPrincipal(Principal principal) {

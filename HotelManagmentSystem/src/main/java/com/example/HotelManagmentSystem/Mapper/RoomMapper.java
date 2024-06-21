@@ -19,7 +19,7 @@ public class RoomMapper {
         room.setCapacity(roomDTO.getCapacity());
         room.setSize(roomDTO.getSize());
         room.setFeatures(roomDTO.getFeatures());
-        room.setLastMaintenanceDate(java.sql.Date.valueOf(roomDTO.getLastMaintenanceDate()));
+        room.setLastMaintenanceDate(roomDTO.getLastMaintenanceDate() != null ? java.sql.Date.valueOf(roomDTO.getLastMaintenanceDate()) : null);
         return room;
     }
 
@@ -34,7 +34,8 @@ public class RoomMapper {
         roomDTO.setCapacity(room.getCapacity());
         roomDTO.setSize(room.getSize());
         roomDTO.setFeatures(room.getFeatures());
-        roomDTO.setLastMaintenanceDate(room.getLastMaintenanceDate().toString());
+        roomDTO.setLastMaintenanceDate(room.getLastMaintenanceDate() != null ? room.getLastMaintenanceDate().toString() : null);
         return roomDTO;
     }
 }
+

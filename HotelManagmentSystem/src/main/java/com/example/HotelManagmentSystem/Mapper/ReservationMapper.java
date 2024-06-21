@@ -42,3 +42,4 @@ public class ReservationMapper {
         return reservations.stream().map(this::toDTO).collect(Collectors.toList());
     }
 }
+

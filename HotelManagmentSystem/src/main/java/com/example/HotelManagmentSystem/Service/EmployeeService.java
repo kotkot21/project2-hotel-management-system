@@ -94,4 +94,48 @@ public class EmployeeService {
         List<Employee> employees = employeeRepository.findByStatus(Employee.Status.valueOf(status));
         return employees.stream().map(employeeMapper::toDTO).collect(Collectors.toList());
     }
+
+    public List<EmployeeDTO> getAllEmployees() {
+        List<Employee> employees = employeeRepository.findAll();
+        return employees.stream().map(employeeMapper::toDTO).collect(Collectors.toList());
+    }
+
+    public EmployeeDTO terminateEmployee(Long employeeId) {
+        Optional<Employee> existingEmployeeOpt = employeeRepository.findById(employeeId);
+        if (existingEmployeeOpt.isPresent()) {
+            Employee existingEmployee = existingEmployeeOpt.get();
+            existingEmployee.setStatus(Employee.Status.TERMINATED);
+            existingEmployee.setEndDate(LocalDate.now());
+            Employee updatedEmployee = employeeRepository.save(existingEmployee);
+            return employeeMapper.toDTO(updatedEmployee);
+        } else {
+            throw new IllegalArgumentException("Employee not found");
+        }
+    }
+
+    public EmployeeDTO activateEmployee(Long employeeId) {
+        Optional<Employee> existingEmployeeOpt = employeeRepository.findById(employeeId);
+        if (existingEmployeeOpt.isPresent()) {
+            Employee existingEmployee = existingEmployeeOpt.get();
+            existingEmployee.setStatus(Employee.Status.ACTIVE);
+            existingEmployee.setStartDate(LocalDate.now());
+            existingEmployee.setEndDate(null);
+            Employee updatedEmployee = employeeRepository.save(existingEmployee);
+            return employeeMapper.toDTO(updatedEmployee);
+        } else {
+            throw new IllegalArgumentException("Employee not found");
+        }
+    }
+
+    public EmployeeDTO changeEmployeeRole(Long employeeId, String newRole) {
+        Optional<Employee> existingEmployeeOpt = employeeRepository.findById(employeeId);
+        if (existingEmployeeOpt.isPresent()) {
+            Employee existingEmployee = existingEmployeeOpt.get();
+            existingEmployee.setRole(Employee.Role.valueOf(newRole));
+            Employee updatedEmployee = employeeRepository.save(existingEmployee);
+            return employeeMapper.toDTO(updatedEmployee);
+        } else {
+            throw new IllegalArgumentException("Employee not found");
+        }
+    }
 }

@@ -11,6 +11,7 @@ import com.example.HotelManagmentSystem.Repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +38,8 @@ public class HousekeepingScheduleService {
             Room room = roomOptional.get();
             Employee employee = employeeOptional.get();
             HousekeepingSchedule housekeepingSchedule = housekeepingScheduleMapper.toEntity(housekeepingScheduleDTO, room, employee);
+            housekeepingSchedule.setStatus(HousekeepingSchedule.Status.PENDING); // Set status to PENDING
+            housekeepingSchedule.setDate(new Date()); // Set date to current date
             HousekeepingSchedule savedSchedule = housekeepingScheduleRepository.save(housekeepingSchedule);
             return housekeepingScheduleMapper.toDTO(savedSchedule);
         } else {
@@ -55,6 +58,23 @@ public class HousekeepingScheduleService {
         } else {
             throw new IllegalArgumentException("Schedule not found");
         }
+    }
+
+    public HousekeepingScheduleDTO updateStatusByRoomId(Long roomId, HousekeepingSchedule.Status newStatus) {
+        List<HousekeepingSchedule> schedules = housekeepingScheduleRepository.findByRoom_RoomId(roomId);
+        if (schedules.isEmpty()) {
+            throw new IllegalArgumentException("No schedules found for the given room ID");
+        }
+
+        for (HousekeepingSchedule schedule : schedules) {
+            if (schedule.getStatus() == HousekeepingSchedule.Status.PENDING && newStatus == HousekeepingSchedule.Status.COMPLETED) {
+                schedule.setStatus(HousekeepingSchedule.Status.COMPLETED);
+                HousekeepingSchedule updatedSchedule = housekeepingScheduleRepository.save(schedule);
+                return housekeepingScheduleMapper.toDTO(updatedSchedule);
+            }
+        }
+
+        throw new IllegalArgumentException("No PENDING schedules found for the given room ID");
     }
 
     public boolean deleteSchedule(Long scheduleId) {
@@ -90,3 +110,4 @@ public class HousekeepingScheduleService {
         return housekeepingScheduleMapper.toDTOList(schedules);
     }
 }
+

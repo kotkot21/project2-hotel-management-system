@@ -42,6 +42,6 @@ public class Reservation {
     private Status status;
 
     public enum Status {
-        CONFIRMED, CANCELLED, CHECKED_IN, CHECKED_OUT
+        CONFIRMED, CANCELLED
     }
 }

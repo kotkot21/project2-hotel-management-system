@@ -28,6 +28,8 @@ public class RoomService {
         Optional<Hotel> hotelOpt = hotelRepository.findById(roomDTO.getHotelId());
         if (hotelOpt.isPresent()) {
             Room room = roomMapper.toEntity(roomDTO, hotelOpt.get());
+            room.setStatus(Room.Status.AVAILABLE);  // Set default status
+            room.setLastMaintenanceDate(null);  // Set default lastMaintenanceDate
             room = roomRepository.save(room);
             return roomMapper.toDTO(room);
         } else {
@@ -75,6 +77,11 @@ public class RoomService {
 
     public List<RoomDTO> getRoomsByStatus(String status) {
         List<Room> rooms = roomRepository.findByStatus(Room.Status.valueOf(status));
+        return rooms.stream().map(roomMapper::toDTO).toList();
+    }
+
+    public List<RoomDTO> getAllRooms() {
+        List<Room> rooms = roomRepository.findAll();
         return rooms.stream().map(roomMapper::toDTO).toList();
     }
 }

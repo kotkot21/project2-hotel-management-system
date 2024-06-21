@@ -5,9 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UpdateUserProfileRequest {
+public class UpdateProfileRequest {
     private String firstname;
     private String lastname;
     private String email;
-    // Add other fields as necessary
 }

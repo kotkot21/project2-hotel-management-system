@@ -42,7 +42,7 @@ public class RoomController {
     }
 
     @GetMapping("/{roomId}")
-    @PreAuthorize("hasAnyAuthority('admin:read', 'CUSTOMER:read')")
+    @PreAuthorize("hasAnyAuthority('admin:read', 'customer:read')")
     public ResponseEntity<RoomDTO> getRoomById(@PathVariable Long roomId) {
         RoomDTO room = roomService.getRoomById(roomId);
         if (room != null) {
@@ -52,16 +52,24 @@ public class RoomController {
     }
 
     @GetMapping("/hotel/{hotelId}")
-    @PreAuthorize("hasAnyAuthority('admin:read', 'CUSTOMER:read')")
+    @PreAuthorize("hasAnyAuthority('admin:read', 'customer:read')")
     public ResponseEntity<List<RoomDTO>> getRoomsByHotelId(@PathVariable Long hotelId) {
         List<RoomDTO> rooms = roomService.getRoomsByHotelId(hotelId);
         return ResponseEntity.ok(rooms);
     }
 
     @GetMapping("/status/{status}")
-    @PreAuthorize("hasAnyAuthority('admin:read', 'CUSTOMER:read')")
+    @PreAuthorize("hasAnyAuthority('admin:read', 'customer:read')")
     public ResponseEntity<List<RoomDTO>> getRoomsByStatus(@PathVariable String status) {
         List<RoomDTO> rooms = roomService.getRoomsByStatus(status);
         return ResponseEntity.ok(rooms);
     }
+
+    @GetMapping
+    @PreAuthorize("hasAnyAuthority('admin:read', 'customer:read')")
+    public ResponseEntity<List<RoomDTO>> getAllRooms() {
+        List<RoomDTO> rooms = roomService.getAllRooms();
+        return ResponseEntity.ok(rooms);
+    }
 }
+

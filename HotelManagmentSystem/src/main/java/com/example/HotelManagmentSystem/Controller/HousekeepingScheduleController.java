@@ -35,6 +35,13 @@ public class HousekeepingScheduleController {
         return ResponseEntity.notFound().build();
     }
 
+    @PutMapping("/status/{roomId}")
+    @PreAuthorize("hasAuthority('admin:update')")
+    public ResponseEntity<HousekeepingScheduleDTO> updateStatusByRoomId(@PathVariable Long roomId, @RequestParam HousekeepingSchedule.Status newStatus) {
+        HousekeepingScheduleDTO updatedSchedule = housekeepingScheduleService.updateStatusByRoomId(roomId, newStatus);
+        return ResponseEntity.ok(updatedSchedule);
+    }
+
     @DeleteMapping("/{scheduleId}")
     @PreAuthorize("hasAuthority('admin:delete')")
     public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId) {
