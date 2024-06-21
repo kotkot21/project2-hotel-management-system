@@ -28,8 +28,8 @@ public class RoomService {
         Optional<Hotel> hotelOpt = hotelRepository.findById(roomDTO.getHotelId());
         if (hotelOpt.isPresent()) {
             Room room = roomMapper.toEntity(roomDTO, hotelOpt.get());
-            room.setStatus(Room.Status.AVAILABLE);  // Set default status
-            room.setLastMaintenanceDate(null);  // Set default lastMaintenanceDate
+            room.setStatus(Room.Status.AVAILABLE);
+            room.setLastMaintenanceDate(null);
             room = roomRepository.save(room);
             return roomMapper.toDTO(room);
         } else {
@@ -44,14 +44,18 @@ public class RoomService {
             Optional<Hotel> hotelOpt = hotelRepository.findById(roomDTO.getHotelId());
             if (hotelOpt.isPresent()) {
                 room.setHotel(hotelOpt.get());
-                room.setStatus(Room.Status.valueOf(roomDTO.getStatus()));
+                try {
+                    room.setStatus(Room.Status.valueOf(roomDTO.getStatus()));
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException("Invalid status value: " + roomDTO.getStatus());
+                }
                 room.setDetails(roomDTO.getDetails());
                 room.setPrice(roomDTO.getPrice());
                 room.setFacilities(roomDTO.getFacilities());
                 room.setCapacity(roomDTO.getCapacity());
                 room.setSize(roomDTO.getSize());
                 room.setFeatures(roomDTO.getFeatures());
-                room.setLastMaintenanceDate(java.sql.Date.valueOf(roomDTO.getLastMaintenanceDate()));
+                room.setLastMaintenanceDate(roomDTO.getLastMaintenanceDate() != null ? java.sql.Date.valueOf(roomDTO.getLastMaintenanceDate()) : null);
                 room = roomRepository.save(room);
                 return roomMapper.toDTO(room);
             } else {

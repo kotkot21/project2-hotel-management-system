@@ -10,7 +10,6 @@ import lombok.*;
 public class RoomDTO {
     private Long roomId;
     private Long hotelId;
-    private String status;
     private String details;
     private Double price;
     private String facilities;
@@ -18,4 +17,5 @@ public class RoomDTO {
     private Double size;
     private String features;
     private String lastMaintenanceDate;
+    private String status;
 }
