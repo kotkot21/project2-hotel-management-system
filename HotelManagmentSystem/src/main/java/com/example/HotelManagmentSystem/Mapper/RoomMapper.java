@@ -12,11 +12,7 @@ public class RoomMapper {
         Room room = new Room();
         room.setRoomId(roomDTO.getRoomId());
         room.setHotel(hotel);
-        try {
-            room.setStatus(Room.Status.valueOf(roomDTO.getStatus()));
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid status value: " + roomDTO.getStatus());
-        }
+        room.setStatus(Room.Status.valueOf(roomDTO.getStatus()));
         room.setDetails(roomDTO.getDetails());
         room.setPrice(roomDTO.getPrice());
         room.setFacilities(roomDTO.getFacilities());

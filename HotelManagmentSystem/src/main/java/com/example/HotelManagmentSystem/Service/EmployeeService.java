@@ -56,7 +56,6 @@ public class EmployeeService {
             existingEmployee.setStartDate(LocalDate.parse(employeeDTO.getStartDate()));
             existingEmployee.setEndDate(employeeDTO.getEndDate() != null ? LocalDate.parse(employeeDTO.getEndDate()) : null);
             existingEmployee.setStatus(Employee.Status.valueOf(employeeDTO.getStatus()));
-            // Ensure admin is updated if it has changed
             if (!existingEmployee.getAdmin().getId().equals(employeeDTO.getManagedByAdminId())) {
                 Optional<User> admin = userRepository.findById(employeeDTO.getManagedByAdminId());
                 if (admin.isPresent()) {
