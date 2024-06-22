@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 20, 2024 at 11:54 PM
+-- Generation Time: Jun 21, 2024 at 11:59 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,8 +44,13 @@ CREATE TABLE `employees` (
 
 INSERT INTO `employees` (`employee_id`, `end_date`, `role`, `salary`, `start_date`, `status`, `managed_by_admin_id`, `hotel_id`) VALUES
 (1, NULL, 'HOUSEKEEPER', 500, '2023-01-01', 'ACTIVE', 1, 1),
-(2, NULL, 'HOUSEKEEPER', 500, '2024-01-01', 'ACTIVE', 1, 1),
-(3, NULL, 'MANAGER', 500, '2023-01-01', 'ACTIVE', 1, 1);
+(2, NULL, 'HOUSEKEEPER', 500, '2023-01-01', 'ACTIVE', 1, 1),
+(3, NULL, 'MANAGER', 500, '2023-01-01', 'ACTIVE', 1, 1),
+(4, NULL, 'MANAGER', 500, '2023-01-01', 'ACTIVE', 1, 1),
+(5, NULL, 'MANAGER', 500, '2023-01-01', 'ACTIVE', 1, 2),
+(6, NULL, 'MANAGER', 500, '2023-01-01', 'ACTIVE', 1, 2),
+(7, NULL, 'RECEPTIONIST', 500, '2023-01-01', 'ACTIVE', 1, 2),
+(8, '2024-06-22', 'HOUSEKEEPER', 500, '2024-06-22', 'TERMINATED', 1, 2);
 
 -- --------------------------------------------------------
 
@@ -68,7 +73,9 @@ CREATE TABLE `hotels` (
 --
 
 INSERT INTO `hotels` (`hotel_id`, `contact_number`, `description`, `email`, `location`, `name`, `rating`) VALUES
-(1, '1234567890', 'A great place to stay.', 'hotel@example.com', 'City Center', 'Hotel 1', 5.00);
+(1, '0599', 'hotel1', 'hotel1@gmail.com', 'h1', 'hotel1', 5.00),
+(2, '0566', 'hotel2', 'hotel2@gmail.com', 'h2', 'hotel2', 5.00),
+(3, '0577', 'hotel3', 'hotel3@gmail.com', 'h3', 'hotel3', 5.00);
 
 -- --------------------------------------------------------
 
@@ -89,9 +96,9 @@ CREATE TABLE `housekeeping_schedules` (
 --
 
 INSERT INTO `housekeeping_schedules` (`schedule_id`, `date`, `status`, `employee_id`, `room_id`) VALUES
-(1, '2024-01-01', 'COMPLETED', 1, 1),
-(2, '2023-01-01', 'COMPLETED', 1, 1),
-(3, '2023-01-01', 'PENDING', 2, 1);
+(1, '2024-06-22', 'PENDING', 4, 5),
+(2, '2024-06-22', 'PENDING', 5, 6),
+(3, '2024-06-22', 'COMPLETED', 5, 3);
 
 -- --------------------------------------------------------
 
@@ -113,7 +120,8 @@ CREATE TABLE `invoices` (
 --
 
 INSERT INTO `invoices` (`invoice_id`, `amount`, `due_date`, `invoice_date`, `status`, `reservation_id`) VALUES
-(1, 50.00, '2023-02-01', '2023-01-01', 'PAID', 1);
+(1, 100.00, NULL, '2024-06-22', 'UNPAID', 1),
+(2, 100.00, '2024-06-22', '2024-06-22', 'PAID', 2);
 
 -- --------------------------------------------------------
 
@@ -126,7 +134,7 @@ CREATE TABLE `reservations` (
   `booking_date` date DEFAULT NULL,
   `check_in_date` date DEFAULT NULL,
   `check_out_date` date DEFAULT NULL,
-  `status` enum('CANCELLED','CHECKED_IN','CHECKED_OUT','CONFIRMED') DEFAULT NULL,
+  `status` enum('CANCELLED','CONFIRMED') DEFAULT NULL,
   `total_price` decimal(38,2) DEFAULT NULL,
   `room_id` bigint(20) NOT NULL,
   `user_id` bigint(20) NOT NULL
@@ -137,8 +145,8 @@ CREATE TABLE `reservations` (
 --
 
 INSERT INTO `reservations` (`reservation_id`, `booking_date`, `check_in_date`, `check_out_date`, `status`, `total_price`, `room_id`, `user_id`) VALUES
-(1, '2023-01-01', '2023-01-01', NULL, 'CONFIRMED', 300.00, 1, 2),
-(2, '2023-01-01', '2023-01-01', NULL, 'CONFIRMED', 300.00, 2, 2);
+(1, '2024-06-22', NULL, NULL, 'CONFIRMED', 50.00, 1, 2),
+(2, '2024-06-22', NULL, NULL, 'CONFIRMED', 50.00, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -164,9 +172,12 @@ CREATE TABLE `rooms` (
 --
 
 INSERT INTO `rooms` (`room_id`, `capacity`, `details`, `facilities`, `features`, `last_maintenance_date`, `price`, `size`, `status`, `hotel_id`) VALUES
-(1, 5, 'room1', 'goof', 'god', '2023-06-01', 50, 5, 'AVAILABLE', 1),
-(2, 5, 'room2', 'good2', 'good2', '2023-07-01', 50, 5, 'AVAILABLE', 1),
-(3, 2, 'room3', 'good3', 'good3', '2023-07-01', 100, 20, 'MAINTENANCE', 1);
+(1, 5, 'room1', 'room1', 'room1', NULL, 500, 30, 'BOOKED', 1),
+(2, 5, 'room2', 'room2', 'room2', NULL, 500, 30, 'BOOKED', 1),
+(3, 5, 'room3', 'room3', 'room3', NULL, 500, 30, 'AVAILABLE', 1),
+(4, 5, 'room4', 'room4', 'room4', NULL, 500, 30, 'AVAILABLE', 2),
+(5, 5, 'room5', 'room5', 'room5', NULL, 500, 30, 'AVAILABLE', 2),
+(6, 5, 'room6', 'room6', 'room6', NULL, 500, 30, 'AVAILABLE', 2);
 
 -- --------------------------------------------------------
 
@@ -175,7 +186,7 @@ INSERT INTO `rooms` (`room_id`, `capacity`, `details`, `facilities`, `features`,
 --
 
 CREATE TABLE `token` (
-  `id` int(11) NOT NULL,
+  `id` bigint(20) NOT NULL,
   `expired` bit(1) NOT NULL,
   `revoked` bit(1) NOT NULL,
   `token` varchar(255) DEFAULT NULL,
@@ -188,15 +199,13 @@ CREATE TABLE `token` (
 --
 
 INSERT INTO `token` (`id`, `expired`, `revoked`, `token`, `token_type`, `user_id`) VALUES
-(202, b'1', b'1', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5YXphbkBnbWFpbC5jb20iLCJpYXQiOjE3MTg5MTM5MDksImV4cCI6MTcxOTAwMDMwOX0.7kzt9aZGoV-noXJrbxU51IZuXUqT-BXVwVHk8pqbicQ', 'BEARER', 1),
-(252, b'1', b'1', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5YXphbkBnbWFpbC5jb20iLCJpYXQiOjE3MTg5MTQxMTYsImV4cCI6MTcxOTAwMDUxNn0.2ie54MU0Aa4OpQ0pO60Xm4f4efEB1heUA2tmCdl00jk', 'BEARER', 1),
-(302, b'1', b'1', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5YXphbkBnbWFpbC5jb20iLCJpYXQiOjE3MTg5MTQzOTQsImV4cCI6MTcxOTAwMDc5NH0.GRyfVP-GPmX1vk2B7bN8ucOfYRqbtIZjUIrW7_VF6oE', 'BEARER', 1),
-(352, b'1', b'1', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhaG1hZEBnbWFpbC5jb20iLCJpYXQiOjE3MTg5MTQ3NzEsImV4cCI6MTcxOTAwMTE3MX0.aHCLdELeBP6QXAVi2ozpK2mmzQkGK62gOhltTy9k4Ns', 'BEARER', 2),
-(402, b'1', b'1', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhaG1hZEBnbWFpbC5jb20iLCJpYXQiOjE3MTg5MTQ5OTksImV4cCI6MTcxOTAwMTM5OX0.iFlueonJ6AggRshpl0KgYoYahFt-KE0TGnxP9W_SGl8', 'BEARER', 2),
-(452, b'1', b'1', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6aWRhbkBnbWFpbC5jb20iLCJpYXQiOjE3MTg5MTUyOTAsImV4cCI6MTcxOTAwMTY5MH0.aAQ-ifGsiZQYTlAJv8xidZ2VAfpG1O5xSZ93SDjywGA', 'BEARER', 1),
-(502, b'0', b'0', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvc2FtYUBnbWFpbC5jb20iLCJpYXQiOjE3MTg5MTg1NjgsImV4cCI6MTcxOTAwNDk2OH0.Fv_gUNrESzPHlpPfUJ2H1RufedvLc3I1oKvj4xUMV_M', 'BEARER', 2),
-(503, b'1', b'1', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6aWRhbkBnbWFpbC5jb20iLCJpYXQiOjE3MTg5MTkxNjIsImV4cCI6MTcxOTAwNTU2Mn0.8jFI_UuYJgWD1Mc2n63oJCbTQON49-m12QtlpoyFhZY', 'BEARER', 1),
-(504, b'0', b'0', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6aWRhbkBnbWFpbC5jb20iLCJpYXQiOjE3MTg5MTkzNTQsImV4cCI6MTcxOTAwNTc1NH0.Gn4iG0-eA9cw44mWdGsLhwrgNVeOeUcB-vHJhjdvjCI', 'BEARER', 1);
+(1, b'1', b'1', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5YXphbkBnbWFpbC5jb20iLCJpYXQiOjE3MTkwMDM5NDgsImV4cCI6MTcxOTA5MDM0OH0.jJCEGs8k7m7S5ip93PMBQsjL9gZsu_uMfOFFyRfuEgU', 'BEARER', 1),
+(2, b'1', b'1', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5YXphbkBnbWFpbC5jb20iLCJpYXQiOjE3MTkwMDM5ODEsImV4cCI6MTcxOTA5MDM4MX0.rhN8odscB1OJA6pRE_6_om3FpMyvu-QB1udTPoSXf7k', 'BEARER', 1),
+(52, b'1', b'1', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5YXphbkBnbWFpbC5jb20iLCJpYXQiOjE3MTkwMDQ3MjAsImV4cCI6MTcxOTA5MTEyMH0.D30zZD2QhMdFuAYvp7lSXaUi53Fpc6FQ1W3h02HV9oA', 'BEARER', 1),
+(102, b'1', b'1', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5YXphbkBnbWFpbC5jb20iLCJpYXQiOjE3MTkwMDQ4MjksImV4cCI6MTcxOTA5MTIyOX0.sK3uLOTW6GCtqL0_O76auYf7xZmHdSwnsUqb9l_XK50', 'BEARER', 1),
+(152, b'1', b'1', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5YXphbkBnbWFpbC5jb20iLCJpYXQiOjE3MTkwMDUwNTAsImV4cCI6MTcxOTA5MTQ1MH0.2Mb4L-qQUD1DNSTYDsDgdoCfSfsRCzDjEJwxjO_RkSI', 'BEARER', 1),
+(153, b'0', b'0', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhaGFtZCIsImlhdCI6MTcxOTAwNjE2OSwiZXhwIjoxNzE5MDkyNTY5fQ.Om-8tbyPmscFK6-VCXfZR7Zi-vjZFe5U3Bv5tj63SYc', 'BEARER', 2),
+(154, b'0', b'0', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5YXphbkBnbWFpbC5jb20iLCJpYXQiOjE3MTkwMDY0MzYsImV4cCI6MTcxOTA5MjgzNn0.hM1q1bYhrSGaWh60dP3-nN_7NjcboTmySItu247qQjM', 'BEARER', 1);
 
 -- --------------------------------------------------------
 
@@ -213,7 +222,7 @@ CREATE TABLE `token_seq` (
 --
 
 INSERT INTO `token_seq` (`next_val`) VALUES
-(601);
+(251);
 
 -- --------------------------------------------------------
 
@@ -235,8 +244,8 @@ CREATE TABLE `_user` (
 --
 
 INSERT INTO `_user` (`id`, `email`, `firstname`, `lastname`, `password`, `role`) VALUES
-(1, 'zidan@gmail.com', 'zidan', 'yazan', '$2a$10$imPqxG4ThHkulOGgDJTuGOrGegsJNIDNkfxS.kuv2ftr1M6//bj3e', 'ADMIN'),
-(2, 'osama@gmail.com', 'osama', 'ahamd', '$2a$10$f.gs0kanOzbzOmocU6eFdezZwmHrPIZ1UWGDEYzM0jcZdJnDHzoNq', 'CUSTOMER');
+(1, 'yazan@gmail.com', 'yazan', 'zidan', '$2a$10$WtluEYXeVtiynEIVy65FGuj4IsZr8.6VGO4t/pWZ2qVauZCWoGz8G', 'ADMIN'),
+(2, 'ahamd', 'ahamd', 'osmam', '$2a$10$4Lmj.ccGaOemmnrJ.cebre3EleuIsEljWbUibRe8j1IP4348rxI2G', 'CUSTOMER');
 
 -- --------------------------------------------------------
 
@@ -326,25 +335,25 @@ ALTER TABLE `_user`
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `employee_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `employee_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `hotels`
 --
 ALTER TABLE `hotels`
-  MODIFY `hotel_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `hotel_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `housekeeping_schedules`
 --
 ALTER TABLE `housekeeping_schedules`
-  MODIFY `schedule_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `schedule_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `invoices`
 --
 ALTER TABLE `invoices`
-  MODIFY `invoice_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `invoice_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `reservations`
@@ -356,7 +365,7 @@ ALTER TABLE `reservations`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `room_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `room_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
